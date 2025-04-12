@@ -1,0 +1,11 @@
+#Reqirements For python
+flask
+#sqlite3
+pyttsx3
+#pydoc
+#shutil
+SpeechRecognition
+pandas
+#smtplib
+google-generativeai
+

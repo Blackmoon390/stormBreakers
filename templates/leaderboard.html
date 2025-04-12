@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Leaderboard</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4f8;
+      padding: 40px;
+      margin: 0;
+    }
+
+    .leaderboard {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .leaderboard h2 {
+      text-align: center;
+      background: #4f46e5;
+      color: white;
+      padding: 20px;
+      margin: 0;
+      font-size: 24px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 16px;
+      text-align: left;
+    }
+
+    thead {
+      background: #f3f4f6;
+      font-weight: bold;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f9fafb;
+    }
+
+    tbody tr:hover {
+      background-color: #e0e7ff;
+    }
+
+    .rank {
+      font-weight: bold;
+      color: #4f46e5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="leaderboard">
+    <h2>🏆 Leaderboard</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboard-body">
+        <!-- Dynamic rows inserted here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const users = [
+      { name: "Alice", score: 1250 },
+      { name: "Bob", score: 1190 },
+      { name: "Charlie", score: 1040 },
+      { name: "Diana", score: 980 },
+      { name: "Eve", score: 920 }
+    ];
+
+    const tbody = document.getElementById("leaderboard-body");
+
+    users
+      .sort((a, b) => b.score - a.score)
+      .forEach((user, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="rank">#${index + 1}</td>
+          <td>${user.name}</td>
+          <td>${user.score}</td>
+        `;
+        tbody.appendChild(row);
+      });
+  </script>
+
+</body>
+</html>

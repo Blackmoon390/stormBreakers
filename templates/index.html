@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Chat App</title>
+    <style>
+        :root {
+            --primary: #FFBB33;
+            --secondary: #6B4226;
+            --accent: #FFF2D9;
+            --light: #FFFBF2;
+            --dark: #4A3520;
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--primary);
+            padding: 0.5eeam;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .setup-container {
+            background-color: white;
+            border-radius: 0.8rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 30rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .task-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #ccc;
+            margin-bottom: 1rem;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 187, 51, 0.2);
+        }
+
+        .button {
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            border: none;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .button-primary {
+            background-color: var(--primary);
+            color: var(--secondary);
+        }
+
+        .button-primary:hover {
+            background-color: #ffa500;
+        }
+
+        .button-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+
+        .button-secondary:hover {
+            background-color: #d1d5db;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="mainpage.html" class="logo">
+            <span>🐻</span>
+            <span>Happy Hive</span>
+            <h6>Chat Room && create Rooms</h6>
+        </a>
+    </header>
+    <div class="setup-container">
+        <div class="task-title">Join or Create a Chat Room</div>
+        
+        <input type="text" id="room-id" placeholder="Enter Room ID">
+        
+        <button class="button button-primary" id="join-btn">Join Room</button>
+        <button class="button button-secondary" id="create-btn">Create New Room</button>
+    </div>
+
+    <script>
+        document.getElementById('join-btn').addEventListener('click', function() {
+            const roomId = document.getElementById('room-id').value.trim();
+            if (roomId) {
+                window.location.href = '/chat/' + roomId;
+            } else {
+                alert('Please enter a Room ID');
+            }
+        });
+        
+        document.getElementById('create-btn').addEventListener('click', function() {
+            window.location.href = '/create';
+        });
+        
+        // Allow pressing Enter to join
+        document.getElementById('room-id').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('join-btn').click();
+            }
+        });
+    </script>
+</body>
+</html>

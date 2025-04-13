@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+    <style>
+        :root {
+            --primary: #FFBB33;
+            --secondary: #6B4226;
+            --accent: #FFF2D9;
+            --light: #FFFBF2;
+            --dark: #4A3520;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--primary);
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+    
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light);
+        }
+    
+        #username-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: var(--light);
+        }
+    
+        .form-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+    
+        .form-container h2 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+    
+        #username-input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+    
+        #start-chat-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary);
+            color: var(--secondary);
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    
+        #start-chat-btn:hover {
+            background-color: #ffa500;
+        }
+    
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+    
+        .chat-header {
+            background-color: var(--primary);
+            color: var(--secondary);
+            padding: 1rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 0.5rem 0.5rem 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    
+        .room-id {
+            font-size: 0.9rem;
+            color: var(--secondary);
+        }
+    
+        .copy-link {
+            background-color: var(--accent);
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+    
+        .copy-link:hover {
+            background-color: var(--light);
+        }
+    
+        .messages-container {
+            flex: 1;
+            background-color: white;
+            padding: 1rem;
+            overflow-y: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+    
+        .message {
+            background-color: var(--accent);
+            color: var(--dark);
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 0.5rem;
+            max-width: 75%;
+        }
+    
+        .message.user {
+            background-color: var(--primary);
+            color: var(--secondary);
+            align-self: flex-end;
+            margin-left: auto;
+        }
+    
+        .message.other {
+            align-self: flex-start;
+            margin-right: auto;
+        }
+    
+        .sender-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+    
+        .time {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 0.25rem;
+            text-align: right;
+        }
+    
+        .input-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+    
+        #message-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+    
+        #message-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 187, 51, 0.2);
+        }
+    
+        #send-button {
+            background-color: var(--primary);
+            color: var(--secondary);
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    
+        #send-button:hover {
+            background-color: #ffa500;
+        }
+    
+        .user-list {
+            margin-top: 1rem;
+        }
+    
+        .user-list h3 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+    
+        #users {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+    
+        #users li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0;
+        }
+    
+        .online-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: green;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        .notification {
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            display: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+    
+        .notification.show {
+            display: block;
+        }
+    </style>
+    
+</head>
+<body>
+    <header class="header">
+        <a href="mainpage.html" class="logo">
+            <span>🐻</span>
+            <span>Happy Hive</span>
+            <h6>Chat Room</h6>
+        </a>
+    </header>
+    <div id="username-form">
+        <div class="form-container">
+            <h2>Enter Username</h2>
+            <input type="text" id="username-input" placeholder="Your name" autofocus>
+            <button id="start-chat-btn">Start Chatting</button>
+        </div>
+    </div>
+    
+    <div id="chat-panel" style="display: none;">
+        <div class="chat-container">
+            <div class="chat-header">
+                <span>Chat Room</span>
+                <span class="room-id" id="room-id-display">Room: {{ room_id }}</span>
+                <button class="copy-link" id="copy-link-btn">Copy Link</button>
+            </div>
+            
+            <div class="messages-container" id="messages">
+                <!-- Messages will be added here dynamically -->
+            </div>
+            
+            <div class="input-container">
+                <input type="text" id="message-input" placeholder="Type a message..." autocomplete="off">
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+        
+        <div class="user-list">
+            <h3>Online Users</h3>
+            <ul id="users">
+                <!-- Users will be added here dynamically -->
+            </ul>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification"></div>
+    
+    <script>
+        // Get the room ID from the page
+        const roomId = '{{ room_id }}';
+        let username = '';
+        let socket;
+        
+        // DOM Elements
+        const usernameForm = document.getElementById('username-form');
+        const usernameInput = document.getElementById('username-input');
+        const startChatBtn = document.getElementById('start-chat-btn');
+        const chatPanel = document.getElementById('chat-panel');
+        const messagesContainer = document.getElementById('messages');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const usersList = document.getElementById('users');
+        const roomIdDisplay = document.getElementById('room-id-display');
+        const copyLinkBtn = document.getElementById('copy-link-btn');
+        const notification = document.getElementById('notification');
+        
+        // Initialize the chat after username is submitted
+        startChatBtn.addEventListener('click', initializeChat);
+        usernameInput.addEventListener('keypress', e => {
+            if (e.key === 'Enter') initializeChat();
+        });
+        
+        function initializeChat() {
+            username = usernameInput.value.trim();
+            if (!username) {
+                alert('Please enter a username');
+                return;
+            }
+            
+            // Hide username form and show chat
+            usernameForm.style.display = 'none';
+            chatPanel.style.display = 'block';
+            
+            // Connect to Socket.IO
+            socket = io();
+            
+            // Join the room
+            socket.on('connect', function() {
+                socket.emit('join', {
+                    room_id: roomId,
+                    username: username
+                });
+                
+                showNotification('Connected to chat room!', 'success');
+            });
+            
+            // Socket.IO event listeners
+            socket.on('message', function(message) {
+                displayMessage(message);
+            });
+            
+            socket.on('user_list', function(users) {
+                updateUsersList(users);
+            });
+            
+            // Add disconnect event
+            window.addEventListener('beforeunload', function() {
+                socket.emit('leave', roomId);
+            });
+            
+            // Setup UI event listeners
+            setupUIEventListeners();
+            
+            // Focus on message input
+            messageInput.focus();
+        }
+        
+        function setupUIEventListeners() {
+            // Send button
+            sendButton.addEventListener('click', sendMessage);
+            
+            // Enter key to send
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            // Copy link button
+            copyLinkBtn.addEventListener('click', copyRoomLink);
+        }
+        
+        function sendMessage() {
+            const content = messageInput.value.trim();
+            if (!content) return;
+            
+            socket.emit('message', {
+                room_id: roomId,
+                content: content
+            });
+            
+            // Clear input and focus
+            messageInput.value = '';
+            messageInput.focus();
+        }
+        
+        function displayMessage(message) {
+            const messageDiv = document.createElement('div');
+            
+            if (message.is_system) {
+                messageDiv.className = 'message system';
+            } else {
+                // Check if message is from current user
+                const isCurrentUser = message.sender === username;
+                messageDiv.className = `message ${isCurrentUser ? 'user' : 'other'}`;
+                
+                // Add sender name if not from current user and not system
+                if (!isCurrentUser) {
+                    const senderDiv = document.createElement('div');
+                    senderDiv.className = 'sender-name';
+                    senderDiv.textContent = message.sender;
+                    
+                    // Set sender color if available
+                    if (message.color) {
+                        senderDiv.style.color = message.color;
+                    }
+                    
+                    messageDiv.appendChild(senderDiv);
+                }
+            }
+            
+            const contentSpan = document.createElement('span');
+            contentSpan.textContent = message.content;
+            messageDiv.appendChild(contentSpan);
+            
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'time';
+            timeDiv.textContent = message.timestamp;
+            messageDiv.appendChild(timeDiv);
+            
+            messagesContainer.appendChild(messageDiv);
+            
+            // Scroll to the bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        function updateUsersList(users) {
+            usersList.innerHTML = '';
+            
+            users.forEach(user => {
+                const li = document.createElement('li');
+                
+                const indicator = document.createElement('span');
+                indicator.className = 'online-indicator';
+                if (user.color) {
+                    indicator.style.backgroundColor = user.color;
+                }
+                
+                li.appendChild(indicator);
+                li.appendChild(document.createTextNode(user.username));
+                
+                usersList.appendChild(li);
+            });
+        }
+        
+        function copyRoomLink() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                showNotification('Room link copied to clipboard!', 'success');
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+                showNotification('Failed to copy link', 'error');
+            });
+        }
+        
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            notification.style.backgroundColor = type === 'success' ? '#4CAF50' : '#f44336';
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

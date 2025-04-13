@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Members List - Happy Hive</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='../static/css/styles.css') }}">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <span>🐻</span>
+      <span>Happy Hive</span>
+    </div>
+  </header>
+
+  <div class="container">
+    <section class="members-container">
+      <h1>Members List</h1>
+      <ul class="members-list">
+        {% for user in users %}
+        <li>
+          <a href="{{ url_for('chat_with_user', receiver=user) }}?sender={{ 'vishnu' }}" class="user-card">{{ user }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+  </div>
+
+  <footer>
+    <h3>Happy Hive</h3>
+    <p>A voice companion for autistic children</p>
+    <div class="footer-links">
+      <a href="#" class="footer-link">About Us</a>
+      <a href="#" class="footer-link">Privacy Policy</a>
+      <a href="#" class="footer-link">Contact</a>
+      <a href="#" class="footer-link">Support</a>
+    </div>
+    <p>&copy; 2025 Happy Hive. All rights reserved.</p>
+  </footer>
+</body>
+</html>

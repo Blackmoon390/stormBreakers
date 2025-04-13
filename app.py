@@ -6,6 +6,7 @@ import shutil
 import speech_recognition as sr
 import VOICE_AI
 import database_admin
+import Emailer
 
 
 
@@ -72,9 +73,8 @@ def tell_story():
 
 
 
-@app.route('/leaderboard')
+@app.route('/leaderboard.html')
 def leaderboard():
-    # Get your data from database or other source
     users = [
         ["Luna", 1520],
         ["Oliver", 1340],
@@ -94,24 +94,33 @@ def leaderboard():
         column1_header=column1_header,
         column2_header=column2_header
     )
-@app.route('/consultant.html')
+@app.route('/consultation.html')
 def consultant():
     doctors=database_admin.show_users()
-    return render_template('consultant.html', doctors=doctors)
+    return render_template('consultation.html', doctors=doctors)
 
 @app.route('/api/notify', methods=['POST'])
 def notify_doctor():
     data = request.json
-    
+    Emailer.mail_sender(data.get('email'))
     # Print the notification to console
-    print(f"Doctor called: {data.get('name')} - {data.get('email')} - {data.get('phone')}")
-    print(f"Message: {data.get('message')}")
-    print(f"Timestamp: {data.get('timestamp')}")
+    #print(f"Doctor called: {data.get('name')} - {data.get('email')} - {data.get('phone')}")
+    
     
     return jsonify({
         "success": True, 
         "message": f"Successfully notified {data.get('name')}"
     })
+
+
+@app.route('/memberslist.html')
+def memberslist():
+    users = ['vishnu', 'micheal', 'madhan']
+    return render_template('memberslist.html', users=users)
+
+@app.route('/chat/<username>')
+def chat_with_user(username):
+    return render_template('chat.html', username=username)
 
 
 

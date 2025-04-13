@@ -35,6 +35,16 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 def bear():
     return render_template("bear.html")
 
+@app.route('/roleplay.html')
+def roleplay():
+    return render_template("roleplay.html")
+
+#!:task route
+
+@app.route('/task_page.html')
+def task_page():
+    return render_template("task_page.html")
+
 @app.route('/upload', methods=['POST'])
 def upload():
     if 'audio' not in request.files:

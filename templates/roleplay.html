@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Roleplay Quiz</title>
+  <!-- Bootstrap 5 CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/roleplaycss.css') }}">
+</head>
+<header>
+  <h1>Happy Hive</h1>
+  <p>
+    Role PLay
+  </p>
+</header>
+<body>
+
+  <div id="quiz-box">
+    <h2 id="scenario">Loading...</h2>
+    <div id="options"></div>
+    <div id="feedback"></div>
+    <button id="next-btn" class="btn btn-success">Next</button>
+  </div>
+
+  <!-- Bootstrap JS (for modal, tooltips, etc.) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/roleplayjs.js') }}"></script>
+
+</body>
+</html>

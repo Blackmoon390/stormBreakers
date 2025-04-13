@@ -13,8 +13,8 @@ socketio = SocketIO(app)
 # Track online users per room
 online_users = {}
 
-@app.route('/')
-def homee():
+@app.route('/index.html')
+def homeCall():
     return render_template('index.html')
 
 @app.route('/create')

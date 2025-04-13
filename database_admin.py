@@ -8,5 +8,3 @@ def show_users():
     conn.close()
     return users 
  
-
-print(show_users())

@@ -20,7 +20,7 @@ def calculate_progress(completed_tasks):
     score = completed_count * 10
     return progress, score
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/task_page1.html', methods=['GET', 'POST'])
 def task_tracker():
     """Handles task tracker display and submission."""
     password_message = ""

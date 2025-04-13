@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Hive - Doctor Consultation</title>
+  <style>
+    :root {
+      --primary: #FFBB33;
+      --secondary: #6B4226;
+      --accent: #FFF2D9;
+      --light: #FFFBF2;
+      --dark: #4A3520;
+    }
+
+    body {
+      background-color: var(--light);
+      color: var(--dark);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: var(--primary);
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: var(--secondary);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      color: var(--secondary);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s ease-in-out;
+      text-align: center;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h2 {
+      font-size: 1.4rem;
+      color: var(--secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      margin: 0.3rem 0;
+      color: #444;
+    }
+
+    .notify-btn {
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      background-color: var(--secondary);
+      color: white;
+      border: none;
+      border-radius: 1.2rem;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .notify-btn:hover {
+      background-color: var(--dark);
+    }
+
+    footer {
+      background-color: var(--secondary);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 4rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">🐻 Happy Hive</div>
+  </header>
+
+  <div class="container">
+    <h1>Doctor Consultation</h1>
+    <div class="grid">
+      {% for name, email, phone in doctors %}
+      <div class="card">
+        <h2>{{ name }}</h2>
+        <p>Email: {{ email }}</p>
+        <p>Phone: {{ phone }}</p>
+        <button class="notify-btn" onclick="notifyDoctor('{{ name }}', '{{ email }}', '{{ phone }}')">Notify</button>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Happy Hive — All Rights Reserved
+  </footer>
+
+  <script>
+    function notifyDoctor(name, email, phone) {
+      const payload = {
+        name: name,
+        email: email,
+        phone: phone
+      };
+
+      fetch('/api/notify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data.message);
+        alert(data.message);
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Failed to notify doctor.");
+      });
+    }
+  </script>
+</body>
+</html>

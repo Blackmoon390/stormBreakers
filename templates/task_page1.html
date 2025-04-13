@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Hive - Tasks</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* All your provided custom CSS is here */
+        /* ⬇️ insert your CSS exactly as given before */
+        :root {
+            --primary: #FFBB33;
+            --secondary: #6B4226;
+            --accent: #FFF2D9;
+            --light: #FFFBF2;
+            --dark: #4A3520;
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--primary);
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .task-container {
+            background-color: white;
+            border-radius: 0.8rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 30rem;
+            margin-top: 2rem;
+        }
+        .task-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--secondary);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .progress-bar {
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            height: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .progress-fill {
+            background-color: var(--primary);
+            border-radius: 9999px;
+            height: 0.5rem;
+            transition: width 0.3s ease;
+        }
+        .progress-text {
+            text-align: right;
+            font-size: 0.875rem;
+            color: var(--secondary);
+        }
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .task-item {
+            display: flex;
+            align-items: center;
+        }
+        .task-checkbox {
+            margin-right: 0.5rem;
+            height: 1.25rem;
+            width: 1.25rem;
+            cursor: pointer;
+        }
+        .task-label {
+            color: var(--dark);
+        }
+        .task-completed {
+            text-decoration: line-through;
+            color: #6b7280;
+        }
+        .score-text {
+            font-size: 1.125rem;
+            color: var(--dark);
+        }
+        .score-value {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .password-container {
+            background-color: var(--accent);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 1.5rem;
+        }
+        .password-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #d1d5db;
+            margin-bottom: 1rem;
+        }
+        .password-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 187, 51, 0.2);
+        }
+        .password-message {
+            font-size: 0.875rem;
+            color: var(--secondary);
+        }
+
+ .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+        .button-primary {
+            background-color: var(--primary);
+            color: var(--secondary);
+        }
+        .button-primary:hover {
+            background-color: #ffa500;
+        }
+        .button-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        .button-secondary:hover {
+            background-color: #d1d5db;
+        }
+        .button-danger {
+            background-color: #ef4444;
+            color: white;
+        }
+        .button-danger:hover {
+            background-color: #dc2626;
+        }
+        .complete-button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary);
+            color: var(--secondary);
+            font-weight: 700;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+        }
+        .complete-button:hover {
+            background-color: #ffa500;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="mainpage.html" class="logo">
+            <span>🐻</span>
+            <span>Happy Hive</span>
+        </a>
+    </header>
+    <div class="task-container">
+        <h1 class="task-title">Task Tracker</h1>
+        <form method="POST" action="/">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ progress }}%"></div>
+            </div>
+            <p class="progress-text">Progress: {{ progress }}%</p>
+
+            <div class="task-list">
+                {% for task_id, task_name in tasks.items() %}
+                <div class="task-item">
+                    <input type="checkbox" id="{{ task_id }}" name="tasks" value="{{ task_id }}" class="task-checkbox" {% if task_id in completed_tasks %} checked {% endif %}>
+                    <label for="{{ task_id }}" class="task-label {% if task_id in completed_tasks %}task-completed{% endif %}">{{ task_name }}</label>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="score-container">
+                <p class="score-text">Your Score: <span class="score-value">{{ score }}</span> / 50</p>
+            </div>
+
+            <div class="password-container">
+                <h2 class="password-title">Password Verification</h2>
+                <input type="password" name="password" placeholder="Enter Password" class="password-input">
+                <p class="password-message">{{ password_message }}</p>
+                <div class="button-container">
+                    <button type="submit" name="verify" value="true" class="button button-secondary">Verify</button>
+                    <button type="submit" name="exit" value="true" class="button button-danger">Exit</button>
+                </div>
+            </div>
+
+            <button type="submit" name="complete" class="complete-button">Complete</button>
+        </form>
+    </div>
+</body>
+</html>

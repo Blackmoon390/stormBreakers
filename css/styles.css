@@ -1,0 +1,141 @@
+:root {
+  --primary: #FFBB33;
+  --secondary: #6B4226;
+  --accent: #FFF2D9;
+  --light: #FFFBF2;
+  --dark: #4A3520;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: var(--light);
+  color: var(--dark);
+}
+
+header {
+  background-color: var(--primary);
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.chat-section {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chat-box {
+  height: 300px;
+  overflow-y: scroll;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  background-color: var(--accent);
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+}
+
+.input-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.message-input {
+  width: 80%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.send-button {
+  padding: 10px 20px;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.send-button:hover {
+  background-color: #f29c11;
+}
+
+.members-container {
+  text-align: center;
+}
+
+.members-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.user-card {
+  display: block;
+  padding: 10px;
+  background-color: var(--accent);
+  margin: 10px 0;
+  text-decoration: none;
+  color: var(--dark);
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.user-card:hover {
+  background-color: #e7e7e7;
+}
+
+footer {
+  background-color: var(--secondary);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 1.5rem 0;
+}
+
+.footer-link {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .chat-box {
+    height: 200px;
+  }
+
+  .members-list {
+    padding: 10px;
+  }
+}

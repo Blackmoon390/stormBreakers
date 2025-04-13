@@ -1,0 +1,96 @@
+/* Global styles */
+body {
+  background-color: #fff8e1;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #4e342e;
+  padding: 0;
+  margin: 0;
+}
+
+/* Header styles */
+header {
+  background-color: #ffeb3b;
+  color: #4e342e;
+  padding: 30px 0;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-bottom: 4px solid #795548;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+header p {
+  margin: 5px 0 0;
+  font-size: 1.2rem;
+}
+
+/* Quiz box styles */
+#quiz-box {
+  max-width: 700px;
+  margin: 50px auto;
+  background-color: #fff3e0;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 2px solid #d7ccc8;
+}
+
+/* Scenario/question */
+#scenario {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #5d4037;
+}
+
+/* Options */
+#options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+#options button {
+  background-color: #fffde7;
+  border: 2px solid #fbc02d;
+  color: #6d4c41;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+#options button:hover {
+  background-color: #fdd835;
+  color: #3e2723;
+}
+
+/* Feedback message */
+#feedback {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #795548;
+  margin-top: 10px;
+}
+
+/* Next button */
+#next-btn {
+  display: block;
+  margin: 0 auto;
+  background-color: #ffca28;
+  border: none;
+  font-weight: bold;
+  color: #3e2723;
+  padding: 10px 24px;
+  border-radius: 10px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+#next-btn:hover {
+  background-color: #f9a825;
+  color: white;
+}

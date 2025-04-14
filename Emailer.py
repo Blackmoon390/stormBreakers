@@ -10,7 +10,7 @@ def mail_sender(reciever_email):
     # Sender and receiver details
     sender_email = "amsama1134@gmail.com"
     receiver_email = reciever_email
-    password = "gomiaayrucmfccoorg"  # If 2FA is enabled, use an app password
+    password = "your google security token"  # If 2FA is enabled, use an app password
     # Create the email content
     subject = "consultation" 
     body = "patient called you for consultation \n ph:8866887765 \n address: 1234, 2nd cross, 3rd main, 4th block, 5th stage, 6th avenue, 7th street, 8th lane, 9th road, 10th area"

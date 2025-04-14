@@ -4,7 +4,7 @@ import pyttsx3
 import os
 
 from regex import V0
-genai.configure(api_key="AIzaSyCUgs3Ta_M2kHOrTXr3p8p0S20z7-9Ez-8")
+genai.configure(api_key="your gemini api")
 
 engine=pyttsx3.init()
 
